@@ -1,0 +1,23 @@
+development:
+  adapter: mysql
+  encoding: utf8
+  database: dphaener_development
+  pool: 5
+  username: darin
+  password: Marley!23
+
+test:
+  adapter: mysql
+  encoding: utf8
+  database: dphaener_test
+  pool: 5
+  username: darin
+  password: Marley!23
+
+production:
+  adapter: mysql
+  encoding: utf8
+  database: dphaener_production
+  pool: 5
+  username: rails
+  password: RGLdpHcjkI
