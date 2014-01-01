@@ -1,0 +1,18 @@
+<h1>Administration Page</h1>
+ 
+<table class="admin-table">
+  <tr class="admin-header">
+    <th>User Email</th>
+    <th>Username</th>
+    <th>Edit</th>
+    <th>Delete</th>
+  </tr>
+  <% @users.each do |user| %>
+    <tr class="user-info">
+      <td><%= user.email %></td>
+      <td><%= user.username %></td>
+      <td><%= link_to "Edit", edit_user_path(user) %></td>
+      <td><%= link_to "Delete", user_path(user), method: :delete, data: { confirm: 'Are you sure? This cannot be undone.' } %>
+    </tr>
+  <% end %>
+</table>

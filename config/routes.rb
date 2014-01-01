@@ -1,4 +1,8 @@
 Dphaener::Application.routes.draw do
+  resources :users
+
+  resources :posts
+
   get "home/index"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -9,6 +13,8 @@ Dphaener::Application.routes.draw do
   get 'about' => 'home#about'
   get 'contact' => 'home#contact'
   get 'brewtools' => 'home#brewtools'
+  get 'blog' => 'home#blog'
+  get 'thrive' => 'home#thrive'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

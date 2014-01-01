@@ -10,7 +10,13 @@ class HomeController < ApplicationController
   end
 
   def brewtools
-  	
   end
   
+  def blog
+  	
+  end
+
+  def thrive
+  	
+  end
 end
