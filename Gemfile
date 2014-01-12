@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.0.0'
+ruby '2.1.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.0'
@@ -50,6 +50,6 @@ end
 gem "bcrypt-ruby", :require => "bcrypt"
 
 # Twitter Bootstrap plugin for easy prettification
-gem "bootstrap-sass", github: 'thomas-mcdonald/bootstrap-sass', branch: '3'
+gem "bootstrap-sass", "~> 3.0.3.0"
 
 gem "puma"

@@ -15,6 +15,7 @@ Dphaener::Application.routes.draw do
   get 'brewtools' => 'home#brewtools'
   get 'blog' => 'home#blog'
   get 'thrive' => 'home#thrive'
+  get 'download' => 'home#download'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
