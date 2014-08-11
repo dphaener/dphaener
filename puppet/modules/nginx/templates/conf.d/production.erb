@@ -1,0 +1,86 @@
+# ssl_certificate /etc/ssl/hittail.com.chained.crt;
+# ssl_certificate_key /etc/ssl/hittail.key;
+
+upstream dphaener {
+  # fail_timeout=0 means we always retry an upstream even if it failed
+  # to return a good HTTP response (in case the Unicorn master nukes a
+  # single worker for timing out).
+
+  # for UNIX domain socket setups:
+  server unix:/tmp/dphaener.socket fail_timeout=0;
+}
+
+server {
+  server_name dphaener.com;
+  return 301 https://www.dphaener.com$request_uri;
+}
+
+server {
+  listen 80;
+  server_name www.dphaener.com *.dphaener.com;
+
+  access_log /var/log/nginx/dphaener_access.log;
+  rewrite_log on;
+
+  # Prefer to serve static files directly from nginx to avoid unnecessary
+  # data copies from the application server.
+  try_files $uri/index.html $uri @static;
+
+  location ~ ^/(assets)/ {
+    gzip_static on;
+    expires max;
+    add_header Cache-Control public;
+  }
+
+  recursive_error_pages on;
+
+  if (-f $document_root/offline.txt) {
+    return 503;
+  }
+
+  error_page 404 /404.html;
+  error_page 500 502 504 /500.html;
+  error_page 503 @503;
+
+  location @503 {
+    error_page 405 = /maintenance.html;
+
+    # Serve static assets if found.
+    if (-f $request_filename) {
+      break;
+    }
+
+    rewrite ^(.*)$ /maintenance.html break;
+  }
+
+  include /etc/nginx/includes/legacy-rewrites;
+
+  location @static {
+    error_page 404 = @app;
+    error_page 403 = @app;
+  }
+
+  location @app {
+    proxy_set_header   Host             $host;
+    proxy_set_header   X-Real-IP        $remote_addr;
+    proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
+    proxy_redirect     off;
+    proxy_pass         http://dphaener;
+
+    client_max_body_size       10m;
+    client_body_buffer_size    128k;
+
+    proxy_connect_timeout      90;
+    proxy_send_timeout         300;
+    proxy_read_timeout         300;
+
+    proxy_buffer_size          4k;
+    proxy_buffers              4 32k;
+    proxy_busy_buffers_size    64k;
+    proxy_temp_file_write_size 64k;
+  }
+  
+  # error_page 500 502 503 504 /500.html;
+  # client_max_body_size 4G;
+  # keepalive_timeout 10;
+}
