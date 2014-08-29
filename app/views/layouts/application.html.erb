@@ -7,8 +7,33 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <div class="container">
+    <div>
+      <%= render 'shared/sidebar_nav' %>
+    </div>
 
-<%= yield %>
+    <div class="main-container clearfix">
+      <%= yield %>
+    </div>
 
+    <div class="footer clearfix">
+      <p>Darin Haener, <%= Time.now.year %></p>
+    </div>
+  </div>
+
+  <!-- Drip -->
+  <script type="text/javascript">
+    var _dcq = _dcq || [];
+    var _dcs = _dcs || {};
+    _dcs.account = '7779753';
+
+    (function() {
+      var dc = document.createElement('script');
+      dc.type = 'text/javascript'; dc.async = true;
+      dc.src = '//tag.drip.dev/7779753.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(dc, s);
+    })();
+  </script>
 </body>
 </html>

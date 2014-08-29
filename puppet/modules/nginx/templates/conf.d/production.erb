@@ -1,6 +1,3 @@
-# ssl_certificate /etc/ssl/hittail.com.chained.crt;
-# ssl_certificate_key /etc/ssl/hittail.key;
-
 upstream dphaener {
   # fail_timeout=0 means we always retry an upstream even if it failed
   # to return a good HTTP response (in case the Unicorn master nukes a
@@ -19,12 +16,13 @@ server {
   listen 80;
   server_name www.dphaener.com *.dphaener.com;
 
+  root /home/app/dphaener/current/public;
   access_log /var/log/nginx/dphaener_access.log;
   rewrite_log on;
 
   # Prefer to serve static files directly from nginx to avoid unnecessary
   # data copies from the application server.
-  try_files $uri/index.html $uri @static;
+  try_files $uri/index.html $uri @app;
 
   location ~ ^/(assets)/ {
     gzip_static on;
@@ -52,8 +50,6 @@ server {
 
     rewrite ^(.*)$ /maintenance.html break;
   }
-
-  include /etc/nginx/includes/legacy-rewrites;
 
   location @static {
     error_page 404 = @app;
