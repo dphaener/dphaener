@@ -1,7 +1,10 @@
 class app_server {
-  include ssh, git, user, nginx
+  include ssh, git, user, nginx, postgresql
   
   $ruby_version = "2.1.2"
+  $osfamily = "Debian"
+  $operatingsystem = "Ubuntu"
+  $operatingsystemrelease = 14.04
   
   # Create the app deployment user
   user::deployer { "app":
@@ -33,11 +36,6 @@ class app_server {
     group   => "deploy",
     mode    => "640",
     require => Rbenv::Compile[$ruby_version],
-  }
-  
-  # Install postgres
-  package { "postgresql":
-    ensure => present,
   }
   
   package { "libpq-dev":
